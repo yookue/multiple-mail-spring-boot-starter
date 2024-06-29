@@ -1,0 +1,11 @@
+# Multiple Mail for Spring Boot Starter
+# Copyright (c) 2020 Yookue Ltd. All rights reserved.
+# https://yookue.com
+
+org.springframework.boot.autoconfigure.EnableAutoConfiguration =\
+    com.yookue.springstarter.multiplemail.config.PrimaryMailSenderConfiguration,\
+    com.yookue.springstarter.multiplemail.config.SecondaryMailSenderConfiguration,\
+    com.yookue.springstarter.multiplemail.config.TertiaryMailSenderConfiguration,\
+    com.yookue.springstarter.multiplemail.config.QuaternaryMailSenderConfiguration,\
+    com.yookue.springstarter.multiplemail.config.QuinaryMailSenderConfiguration,\
+    com.yookue.springstarter.multiplemail.config.SenaryMailSenderConfiguration
