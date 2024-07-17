@@ -17,10 +17,10 @@
 package com.yookue.springstarter.multiplemail.config;
 
 
-import javax.activation.MimeType;
-import javax.annotation.Nonnull;
-import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
+import jakarta.activation.MimeType;
+import jakarta.annotation.Nonnull;
+import jakarta.mail.Session;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

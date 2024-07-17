@@ -17,8 +17,8 @@
 package org.springframework.boot.autoconfigure.mail;
 
 
-import javax.annotation.Nonnull;
-import javax.mail.Session;
+import jakarta.annotation.Nonnull;
+import jakarta.mail.Session;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 
