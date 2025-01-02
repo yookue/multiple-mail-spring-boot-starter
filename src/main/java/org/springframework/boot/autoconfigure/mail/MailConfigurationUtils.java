@@ -18,8 +18,11 @@ package org.springframework.boot.autoconfigure.mail;
 
 
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.mail.Session;
+import org.springframework.boot.ssl.SslBundles;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import com.yookue.commonplexus.springutil.support.SingletonObjectProvider;
 
 
 /**
@@ -40,8 +43,8 @@ public abstract class MailConfigurationUtils {
         return configuration.mailSender(session);
     }
 
-    public static JavaMailSenderImpl classicMailSender(@Nonnull MailProperties properties) {
+    public static JavaMailSenderImpl classicMailSender(@Nonnull MailProperties properties, @Nullable SslBundles bundles) {
         MailSenderPropertiesConfiguration configuration = new MailSenderPropertiesConfiguration();
-        return configuration.mailSender(properties);
+        return configuration.mailSender(properties, SingletonObjectProvider.ofNullable(bundles));
     }
 }

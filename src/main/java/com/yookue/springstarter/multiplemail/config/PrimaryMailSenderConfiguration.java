@@ -19,6 +19,7 @@ package com.yookue.springstarter.multiplemail.config;
 
 import jakarta.activation.MimeType;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.mail.Session;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.InitializingBean;
@@ -34,6 +35,7 @@ import org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration;
 import org.springframework.boot.autoconfigure.mail.MailConfigurationUtils;
 import org.springframework.boot.autoconfigure.mail.MailSenderValidatorAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.ssl.SslBundles;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -68,6 +70,7 @@ public class PrimaryMailSenderConfiguration {
     public static final String MAIL_PROPERTIES = "primaryMailProperties";    // $NON-NLS-1$
     public static final String MAIL_SESSION = "primaryMailSession";    // $NON-NLS-1$
     public static final String MAIL_SENDER = "primaryMailSender";    // $NON-NLS-1$
+    public static final String SSL_BUNDLES = "primaryMailSslBundles";    // $NON-NLS-1$
 
 
     /**
@@ -126,8 +129,9 @@ public class PrimaryMailSenderConfiguration {
         @Primary
         @Bean(name = MAIL_SENDER)
         @ConditionalOnMissingBean(name = MAIL_SENDER)
-        public JavaMailSenderImpl mailSender(@Qualifier(value = MAIL_PROPERTIES) @Nonnull MailProperties properties) {
-            return MailConfigurationUtils.classicMailSender(properties);
+        @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+        public JavaMailSenderImpl mailSender(@Qualifier(value = MAIL_PROPERTIES) @Nonnull MailProperties properties, @Qualifier(value = SSL_BUNDLES) @Nullable SslBundles bundles) {
+            return MailConfigurationUtils.classicMailSender(properties, bundles);
         }
     }
 
