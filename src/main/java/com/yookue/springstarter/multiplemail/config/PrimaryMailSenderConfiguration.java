@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBooleanProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -56,7 +57,7 @@ import com.yookue.commonplexus.springcondition.annotation.ConditionalOnMissingPr
  * @reference "https://www.codejava.net/frameworks/spring-boot/email-sending-tutorial"
  */
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnProperty(prefix = "spring.multiple-mail", name = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnBooleanProperty(prefix = "spring.multiple-mail", name = "enabled", matchIfMissing = true)
 @ConditionalOnAnyProperties(value = {
     @ConditionalOnProperty(prefix = PrimaryMailSenderConfiguration.PROPERTIES_PREFIX, name = "host"),
     @ConditionalOnProperty(prefix = PrimaryMailSenderConfiguration.PROPERTIES_PREFIX, name = "jndi-name")
