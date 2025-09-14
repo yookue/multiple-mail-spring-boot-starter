@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Yookue Ltd. All rights reserved.
+ * Copyright (c) 2020 Unikue Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.yookue.springstarter.multiplemail.config;
+package cn.unikue.springstarter.multiplemail.config;
 
 
 import jakarta.activation.MimeType;
@@ -25,6 +25,7 @@ import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBooleanProperty;
@@ -40,38 +41,34 @@ import org.springframework.boot.ssl.SslBundles;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import com.yookue.commonplexus.springcondition.annotation.ConditionalOnAnyProperties;
-import com.yookue.commonplexus.springcondition.annotation.ConditionalOnMissingProperty;
+import cn.unikue.commonplexus.springcondition.annotation.ConditionalOnAnyProperties;
+import cn.unikue.commonplexus.springcondition.annotation.ConditionalOnMissingProperty;
 
 
 /**
- * Primary configuration for mail sender
+ * Tertiary configuration for mail sender
  *
  * @author David Hsing
- * @see org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration
- * @see org.springframework.boot.autoconfigure.mail.MailSenderValidatorAutoConfiguration
- * @reference "https://www.codejava.net/frameworks/spring-boot/email-sending-tutorial"
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnBooleanProperty(prefix = "spring.multiple-mail", name = "enabled", matchIfMissing = true)
 @ConditionalOnAnyProperties(value = {
-    @ConditionalOnProperty(prefix = PrimaryMailSenderConfiguration.PROPERTIES_PREFIX, name = "host"),
-    @ConditionalOnProperty(prefix = PrimaryMailSenderConfiguration.PROPERTIES_PREFIX, name = "jndi-name")
+    @ConditionalOnProperty(prefix = TertiaryMailSenderConfiguration.PROPERTIES_PREFIX, name = "host"),
+    @ConditionalOnProperty(prefix = TertiaryMailSenderConfiguration.PROPERTIES_PREFIX, name = "jndi-name")
 })
 @ConditionalOnClass(value = {MimeMessage.class, MimeType.class, MailSender.class})
+@AutoConfigureAfter(value = SecondaryMailSenderConfiguration.class)
 @AutoConfigureBefore(value = MailSenderAutoConfiguration.class)
-@Import(value = {PrimaryMailSenderConfiguration.Entry.class, PrimaryMailSenderConfiguration.Jndi.class, PrimaryMailSenderConfiguration.Classic.class, PrimaryMailSenderConfiguration.Validator.class})
-@SuppressWarnings({"JavadocDeclaration", "JavadocLinkAsPlainText"})
-public class PrimaryMailSenderConfiguration {
-    public static final String PROPERTIES_PREFIX = "spring.multiple-mail.primary";    // $NON-NLS-1$
-    public static final String MAIL_PROPERTIES = "primaryMailProperties";    // $NON-NLS-1$
-    public static final String MAIL_SESSION = "primaryMailSession";    // $NON-NLS-1$
-    public static final String MAIL_SENDER = "primaryMailSender";    // $NON-NLS-1$
-    public static final String SSL_BUNDLES = "primaryMailSslBundles";    // $NON-NLS-1$
+@Import(value = {TertiaryMailSenderConfiguration.Entry.class, TertiaryMailSenderConfiguration.Jndi.class, TertiaryMailSenderConfiguration.Classic.class, TertiaryMailSenderConfiguration.Validator.class})
+public class TertiaryMailSenderConfiguration {
+    public static final String PROPERTIES_PREFIX = "spring.multiple-mail.tertiary";    // $NON-NLS-1$
+    public static final String MAIL_PROPERTIES = "tertiaryMailProperties";    // $NON-NLS-1$
+    public static final String MAIL_SESSION = "tertiaryMailSession";    // $NON-NLS-1$
+    public static final String MAIL_SENDER = "tertiaryMailSender";    // $NON-NLS-1$
+    public static final String SSL_BUNDLES = "tertiaryMailSslBundles";    // $NON-NLS-1$
 
 
     /**
@@ -81,7 +78,6 @@ public class PrimaryMailSenderConfiguration {
      */
     @Order(value = 0)
     static class Entry {
-        @Primary
         @Bean(name = MAIL_PROPERTIES)
         @ConditionalOnMissingBean(name = MAIL_PROPERTIES)
         @ConfigurationProperties(prefix = PROPERTIES_PREFIX)
@@ -101,14 +97,12 @@ public class PrimaryMailSenderConfiguration {
     @ConditionalOnBean(name = MAIL_PROPERTIES, value = MailProperties.class)
     @Order(value = 1)
     static class Jndi {
-        @Primary
         @Bean(name = MAIL_SESSION)
         @ConditionalOnMissingBean(name = MAIL_SESSION)
         public Session mailSession(@Qualifier(value = MAIL_PROPERTIES) @Nonnull MailProperties properties) throws IllegalStateException {
             return MailConfigurationUtils.jndiMailSession(properties);
         }
 
-        @Primary
         @Bean(name = MAIL_SENDER)
         @ConditionalOnBean(name = MAIL_SESSION)
         @ConditionalOnMissingBean(name = MAIL_SENDER)
@@ -127,7 +121,6 @@ public class PrimaryMailSenderConfiguration {
     @ConditionalOnBean(name = MAIL_PROPERTIES, value = MailProperties.class)
     @Order(value = 2)
     static class Classic {
-        @Primary
         @Bean(name = MAIL_SENDER)
         @ConditionalOnMissingBean(name = MAIL_SENDER)
         @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")

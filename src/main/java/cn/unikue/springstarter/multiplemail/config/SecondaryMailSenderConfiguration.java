@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Yookue Ltd. All rights reserved.
+ * Copyright (c) 2020 Unikue Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.yookue.springstarter.multiplemail.config;
+package cn.unikue.springstarter.multiplemail.config;
 
 
 import jakarta.activation.MimeType;
@@ -44,31 +44,31 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import com.yookue.commonplexus.springcondition.annotation.ConditionalOnAnyProperties;
-import com.yookue.commonplexus.springcondition.annotation.ConditionalOnMissingProperty;
+import cn.unikue.commonplexus.springcondition.annotation.ConditionalOnAnyProperties;
+import cn.unikue.commonplexus.springcondition.annotation.ConditionalOnMissingProperty;
 
 
 /**
- * Tertiary configuration for mail sender
+ * Secondary configuration for mail sender
  *
  * @author David Hsing
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnBooleanProperty(prefix = "spring.multiple-mail", name = "enabled", matchIfMissing = true)
 @ConditionalOnAnyProperties(value = {
-    @ConditionalOnProperty(prefix = TertiaryMailSenderConfiguration.PROPERTIES_PREFIX, name = "host"),
-    @ConditionalOnProperty(prefix = TertiaryMailSenderConfiguration.PROPERTIES_PREFIX, name = "jndi-name")
+    @ConditionalOnProperty(prefix = SecondaryMailSenderConfiguration.PROPERTIES_PREFIX, name = "host"),
+    @ConditionalOnProperty(prefix = SecondaryMailSenderConfiguration.PROPERTIES_PREFIX, name = "jndi-name")
 })
 @ConditionalOnClass(value = {MimeMessage.class, MimeType.class, MailSender.class})
-@AutoConfigureAfter(value = SecondaryMailSenderConfiguration.class)
+@AutoConfigureAfter(value = PrimaryMailSenderConfiguration.class)
 @AutoConfigureBefore(value = MailSenderAutoConfiguration.class)
-@Import(value = {TertiaryMailSenderConfiguration.Entry.class, TertiaryMailSenderConfiguration.Jndi.class, TertiaryMailSenderConfiguration.Classic.class, TertiaryMailSenderConfiguration.Validator.class})
-public class TertiaryMailSenderConfiguration {
-    public static final String PROPERTIES_PREFIX = "spring.multiple-mail.tertiary";    // $NON-NLS-1$
-    public static final String MAIL_PROPERTIES = "tertiaryMailProperties";    // $NON-NLS-1$
-    public static final String MAIL_SESSION = "tertiaryMailSession";    // $NON-NLS-1$
-    public static final String MAIL_SENDER = "tertiaryMailSender";    // $NON-NLS-1$
-    public static final String SSL_BUNDLES = "tertiaryMailSslBundles";    // $NON-NLS-1$
+@Import(value = {SecondaryMailSenderConfiguration.Entry.class, SecondaryMailSenderConfiguration.Jndi.class, SecondaryMailSenderConfiguration.Classic.class, SecondaryMailSenderConfiguration.Validator.class})
+public class SecondaryMailSenderConfiguration {
+    public static final String PROPERTIES_PREFIX = "spring.multiple-mail.secondary";    // $NON-NLS-1$
+    public static final String MAIL_PROPERTIES = "secondaryMailProperties";    // $NON-NLS-1$
+    public static final String MAIL_SESSION = "secondaryMailSession";    // $NON-NLS-1$
+    public static final String MAIL_SENDER = "secondaryMailSender";    // $NON-NLS-1$
+    public static final String SSL_BUNDLES = "secondaryMailSslBundles";    // $NON-NLS-1$
 
 
     /**
